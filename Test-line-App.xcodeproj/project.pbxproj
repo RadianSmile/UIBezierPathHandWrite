@@ -15,6 +15,7 @@
 		03BA98601EBB24C70084CFAB /* Test_line_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BA985F1EBB24C70084CFAB /* Test_line_AppTests.swift */; };
 		03BA986B1EBB24C70084CFAB /* Test_line_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BA986A1EBB24C70084CFAB /* Test_line_AppUITests.swift */; };
 		03BA98791EBB4D180084CFAB /* VectorMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BA98781EBB4D180084CFAB /* VectorMath.swift */; };
+		03E4D87C1EC0472E0066F022 /* HandStyleDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E4D87B1EC0472E0066F022 /* HandStyleDrawer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		03BA986A1EBB24C70084CFAB /* Test_line_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_line_AppUITests.swift; sourceTree = "<group>"; };
 		03BA986C1EBB24C70084CFAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BA98781EBB4D180084CFAB /* VectorMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorMath.swift; sourceTree = "<group>"; };
+		03E4D87B1EC0472E0066F022 /* HandStyleDrawer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandStyleDrawer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				03BA98531EBB24C70084CFAB /* LaunchScreen.storyboard */,
 				03BA98561EBB24C70084CFAB /* Info.plist */,
 				03BA98781EBB4D180084CFAB /* VectorMath.swift */,
+				03E4D87B1EC0472E0066F022 /* HandStyleDrawer.swift */,
 			);
 			path = "Test-line-App";
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03BA984D1EBB24C70084CFAB /* ViewController.swift in Sources */,
+				03E4D87C1EC0472E0066F022 /* HandStyleDrawer.swift in Sources */,
 				03BA98791EBB4D180084CFAB /* VectorMath.swift in Sources */,
 				03BA984B1EBB24C70084CFAB /* AppDelegate.swift in Sources */,
 			);
@@ -507,6 +511,7 @@
 				03BA98711EBB24C70084CFAB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03BA98721EBB24C70084CFAB /* Build configuration list for PBXNativeTarget "Test-line-AppTests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +520,7 @@
 				03BA98741EBB24C70084CFAB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03BA98751EBB24C70084CFAB /* Build configuration list for PBXNativeTarget "Test-line-AppUITests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +529,7 @@
 				03BA98771EBB24C70084CFAB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
