@@ -9,13 +9,15 @@
 import Darwin
 import UIKit
 
+
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         createOther()
-        createButton()
+//        createButton()
         
     }
 
@@ -23,7 +25,8 @@ class ViewController: UIViewController {
     func createOther (){
         let switchView = UISwitch(frame: CGRect(x: 50.0, y: 50.0, width: 300.0, height: 300.0))
         
-        
+        let hs = HandSketcher(switchView.frame)
+        _ = hs.drawCircle(switchView.frame)
 
 //        switchView.addTarget(self, action: #selector(buttonAction(sender:)), for: .)
         view.addSubview(switchView)
@@ -37,28 +40,32 @@ class ViewController: UIViewController {
         button.frame = CGRect(x: 50.0, y: 50.0, width: 300.0, height: 300.0)
         button.imageView?.contentMode = .scaleAspectFill
         
-        let img = HandSketch.render(frame: button.frame, paths: [
-            HandSketch.drawRect(button.frame)
-        ])
         
-        button.setBackgroundImage(img, for: .normal)
+        let hs = HandSketcher(button.frame)
+            hs.drawCircle(button.frame).style.update(weight: 2, dashT: .Dot )
+            hs.drawLine(button.frame).style.update(weight: 2, dashT: .Dot)
+        
+        button.setBackgroundImage( hs.render() , for: .normal)
         
 
         button.addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
+        view.addSubview(button)
         
         
         
         let button2 = UIButton( type: .custom)
-        button2.frame = CGRect(x: 50, y: 450.0, width: 100, height: 10)
-        button2.setTitle("✸", for: .normal)
-        let s = SketchMgr(button2.frame)
-        s.addDash(button2.frame, .Dot)
-        
+        button2.frame = CGRect(x: 50, y: 450.0, width: 300, height: 30)
+//        button2.setTitle("✸", for: .normal)
     
-
+        let s = Sketcher(button2.frame)
         
-//        button2.setBackgroundImage(s.render(), for: .normal)
-        view.addSubview(button)
+        _ = s.drawRect(button2.frame).style.update(weight: 2, dashT: .Dot )
+        s.drawLine(button2.frame).style.update(weight: 2, dashT: .Dot)
+        
+        let img = s.render()
+    
+        button2.setBackgroundImage(img, for: .normal)
+        view.addSubview(button2)
         
     
         

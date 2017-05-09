@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		034971B01EC18BE400C68669 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034971AF1EC18BE400C68669 /* UIViewExtension.swift */; };
 		03BA984B1EBB24C70084CFAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BA984A1EBB24C70084CFAB /* AppDelegate.swift */; };
 		03BA984D1EBB24C70084CFAB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BA984C1EBB24C70084CFAB /* ViewController.swift */; };
 		03BA98501EBB24C70084CFAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03BA984E1EBB24C70084CFAB /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		034971AF1EC18BE400C68669 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		03BA98471EBB24C70084CFAB /* Test-line-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test-line-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BA984A1EBB24C70084CFAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03BA984C1EBB24C70084CFAB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				03BA98561EBB24C70084CFAB /* Info.plist */,
 				03BA98781EBB4D180084CFAB /* VectorMath.swift */,
 				03E4D87B1EC0472E0066F022 /* HandStyleDrawer.swift */,
+				034971AF1EC18BE400C68669 /* UIViewExtension.swift */,
 			);
 			path = "Test-line-App";
 			sourceTree = "<group>";
@@ -199,7 +202,7 @@
 				TargetAttributes = {
 					03BA98461EBB24C70084CFAB = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					03BA985A1EBB24C70084CFAB = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				034971B01EC18BE400C68669 /* UIViewExtension.swift in Sources */,
 				03BA984D1EBB24C70084CFAB /* ViewController.swift in Sources */,
 				03E4D87C1EC0472E0066F022 /* HandStyleDrawer.swift in Sources */,
 				03BA98791EBB4D180084CFAB /* VectorMath.swift in Sources */,
@@ -418,10 +422,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Test-line-App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Radian.Test-line-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -430,10 +437,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Test-line-App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Radian.Test-line-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

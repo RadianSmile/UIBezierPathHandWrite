@@ -53,10 +53,23 @@ extension CGPoint {
 
 class UIHandBezierPath : UIBezierPath {
     
-
+    var style : Style
+    override init (){
+        self.style = Style()
+        super.init()
+        
+    }
     
+    func addLine(_ tuple:(CGFloat,CGFloat)) {
+        self.addLine(to: CGPoint(x :tuple.0 , y :tuple.1))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     func start (_ to:CGPoint){
         self.move(to:to)
+        
     }
 
     func lineTo (_ pointTuple: (CGFloat,CGFloat)){
@@ -129,7 +142,7 @@ class UIHandBezierPath : UIBezierPath {
         _ arcType : ArcType = .Quater
     ){
         switch(arcType){
-        case .Quater :
+        case .Half :
             
             let from = self.currentPoint.vector
             let to = toP.vector
@@ -142,7 +155,8 @@ class UIHandBezierPath : UIBezierPath {
         
             break
         
-        case .Half :
+        case .Quater :
+            
             arcTo(toP)
             break
         }
@@ -157,19 +171,18 @@ class UIHandBezierPath : UIBezierPath {
         let from = self.currentPoint.vector
         let to = toP.vector
         
-        var sub = to - from
+        let sub = to - from
         
         
         // ㄥ 找到圓心點
         let toCenterV = sub.rotated( by: Scalar.quarterPi) / Scalar(sqrt(2))
-        let rCenter = toCenterV + from
         let r = toCenterV.length
         
         
         let controlScale:Scalar = 0.552284749831
         // ref:http://stackoverflow.com/questions/24012511/mathematical-functions-in-swift
         
-        let randScale = Scalar(r/10)
+        let randScale = Scalar(10)
         
         let rand1 = Vector2.random() * randScale
         let rand2 = Vector2.random() * randScale
@@ -188,40 +201,60 @@ class UIHandBezierPath : UIBezierPath {
  
 
     
+    enum DashType {
+        case Dot , Line , Custom , None
+    }
     
     public struct Style {
-        var fill : UIColor
-        var stroke : UIColor
-        var weight : CGFloat
+        var fill : UIColor = UIColor.white
+        var stroke : UIColor = UIColor.black
+        var weight : CGFloat = 2.0
+        var dashT : DashType = .None
+        var dashP : [CGFloat] = []
         
-        init (
-            _ f:UIColor = UIColor.white ,
-            _ s:UIColor = UIColor.black ,
-            _ w:CGFloat = 2.0
-            ){
-            fill = f
-            stroke = s
-            weight = w
+        mutating func update (
+            fill:UIColor? = nil,
+            stroke:UIColor? = nil,
+            weight:CGFloat? = nil,
+            dashT:DashType? = nil,
+            dashP:[CGFloat]? = nil
+        ){
+            if (fill != nil){ self.fill = fill!}
+            if (stroke != nil){ self.stroke = stroke!}
+            if (weight != nil){ self.weight = weight!}
+            if (dashT != nil){ self.dashT = dashT!}
+            if (dashP != nil){ self.dashP = dashP!}
         }
     }
     
-    var style : Style?
     
-    func style (
-        _ fill :UIColor = .white,
-        _ stroke : UIColor = .black ,
-        _ weight : CGFloat = 2.0
-        ){
-        self.style = Style(fill,stroke,weight)
-    }
     
     func draw (){
         
-        if (self.style == nil){
-            self.style()
+        let s = style
+        
+        
+        
+        var v :[CGFloat] = [1,1]
+        
+        if (s.dashT != .None){
+            let dashT = s.dashT
+
+            switch (dashT){
+            case .Custom :
+                v = s.dashP
+            case .Dot :
+                v = [10,10]
+            case .Line:
+                v = [20,10]
+            default :
+                break
+            }
+            
+            self.setLineDash(&v, count: 2, phase: 0)
+            
         }
         
-        let s = style!
         
         s.fill.setFill()
         self.fill()
@@ -229,6 +262,8 @@ class UIHandBezierPath : UIBezierPath {
         s.stroke.setStroke()
         self.lineWidth = s.weight
         self.stroke()
+        
+        
     }
 
   
@@ -254,11 +289,17 @@ struct FrameData {
 }
 
 
-class HandSketch {
+class BaseSketcher {
+    var frame : CGRect
+    var paths : [UIHandBezierPath]
     
-
+    init (_ frame : CGRect){
+        self.frame = frame
+        self.paths = []
+    }
     
-    static func render (frame : CGRect , paths : [UIHandBezierPath] )-> UIImage{
+    
+    func render ()-> UIImage{
         
         UIGraphicsBeginImageContextWithOptions(frame.size,false,0.0)
         
@@ -273,7 +314,15 @@ class HandSketch {
         
     }
     
-    static func drawLine (_ frame : CGRect) -> UIHandBezierPath{
+    func append(_ otherSketcher : BaseSketcher){
+        self.paths.append(contentsOf: otherSketcher.paths)
+    }
+}
+
+
+class HandSketcher : BaseSketcher  {
+    
+    func drawLine (_ frame : CGRect) -> UIHandBezierPath{
         let f = FrameData(frame)
         let y = CGFloat(f.ph) / CGFloat(2.0)
         let from = CGPoint(0 , y )
@@ -281,20 +330,22 @@ class HandSketch {
         
         return drawLine(from,to)
         
+        
     }
     
-    static func drawLine (_ from : CGPoint , _ to : CGPoint) -> UIHandBezierPath{
+    func drawLine (_ from : CGPoint , _ to : CGPoint) -> UIHandBezierPath{
         
         let path = UIHandBezierPath()
         path.start(from)
         path.lineTo(to)
-        path.close()
+//        path.close()
+        paths.append(path)
         return path
         
     }
     
 
-    static func drawCircle (_ frame : CGRect)-> UIHandBezierPath{
+    func drawCircle (_ frame : CGRect)-> UIHandBezierPath{
         
         let f = FrameData(frame)
         
@@ -307,11 +358,12 @@ class HandSketch {
         path.arcTo(rightPoint, .Half)
         path.arcTo(leftPoint, .Half)
         path.close()
+        paths.append(path)
         return path
         
     }
     
-    static func drawRect (_ frame : CGRect) -> UIHandBezierPath{
+    func drawRect (_ frame : CGRect) -> UIHandBezierPath{
         
         let f = FrameData(frame)
         let path = UIHandBezierPath()
@@ -322,78 +374,53 @@ class HandSketch {
         path.lineTo((f.px, f.py + f.ph))
         path.lineTo((f.px, f.py))
         path.close()
-        
+        paths.append(path)
         return path
         
     }
+
 }
 
+class Sketcher : BaseSketcher {
+    
+    func drawLine (_ from : CGPoint , _ to : CGPoint) -> UIHandBezierPath{
+        
+        let path = UIHandBezierPath()
+        path.move(to:from)
+        path.addLine(to: to)
+//        path.close()
+        
+        paths.append(path)
+        
+        return path
+        
+        
+    }
 
-
-class SketchMgr {
-    
-    let frame : CGRect
-    
-    private var paths : [UIHandBezierPath]
-    
-    enum DashType {
-        case Dot , Line , Custom
+    func drawLine(_ frame : CGRect)-> UIHandBezierPath{
+        let f = FrameData(frame)
+        let from = CGPoint(x:0   , y:f.cy )
+        let to   = CGPoint(x:f.w , y:f.cy)
+        
+        return drawLine(from,to)
     }
     
-    init (_ frame : CGRect){
-        self.frame = frame
-        self.paths = []
-    }
-    
-    
-    
-    
-    
-    func addDash (_ frame : CGRect ,  _ dashType : DashType , _ style : UIHandBezierPath.Style? = nil ) -> UIHandBezierPath {
+    func drawRect (_ frame : CGRect) -> UIHandBezierPath{
         
-        var s = style ?? UIHandBezierPath.Style()
+        let f = FrameData(frame)
+        let path = UIHandBezierPath()
         
-        let f = FrameData (frame)
-        
-        
-        
-        var v :[CGFloat] = [1,1]
-        
-        let path = UIHandBezierPath() ;
-        s.weight = f.cy
-        
-        switch (dashType){
-        case .Dot :
-            v = [s.weight,s.weight]
-        case .Line:
-            v = [s.weight * 3,s.weight]
-        default :
-            break
-        }
-        
-        path.move(to: CGPoint(x:0 , y:f.cy))
-        path.addLine(to: CGPoint(x:f.w, y:f.cy))
-        path.setLineDash(&v, count: 2, phase: 0)
+        path.start(CGPoint(x:f.px, y:f.py))
+        path.addLine((f.px + f.pw, f.py ))
+        path.addLine((f.px + f.pw, f.py + f.ph))
+        path.addLine((f.px, f.py + f.ph))
+        path.addLine((f.px, f.py))
         path.close()
-        path.style = s
-        
-        paths.append( path )
+        paths.append(path)
         return path
         
     }
-    
-    func render ()-> UIImage{
-        UIGraphicsBeginImageContextWithOptions(frame.size,false,0.0)
-        
-        for path in paths {
-            path.draw()
-        }
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        return image
-    }
-    
-
 }
+
+
+
